@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdraw - PeerPay</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="withdraw-page">
+    <main class="withdraw-shell" aria-labelledby="withdrawTitle">
+        <section class="withdraw-card">
+            <div class="withdraw-card__glow" aria-hidden="true"></div>
+
+            <div class="brand withdraw-brand">
+                <span class="logo-mark">↗</span>
+                <span>PeerPay</span>
+            </div>
+
+            <div class="withdraw-copy">
+                <span class="eyebrow">Secure withdrawal</span>
+                <h1 id="withdrawTitle">Withdraw funds with confidence.</h1>
+                <p>Enter the amount you want to withdraw. We will verify the request before any processing begins.</p>
+            </div>
+
+            <form id="withdrawForm" novalidate>
+                <div class="form-group">
+                    <label for="withdrawAmount">Amount</label>
+                    <div class="amount-field">
+                        <span aria-hidden="true">$</span>
+                        <input type="number" id="withdrawAmount" name="withdrawAmount" inputmode="decimal" min="0.01" step="0.01" placeholder="0.00" aria-describedby="withdrawError" required>
+                    </div>
+                    <small class="helper-text">Minimum amount must be entered before continuing.</small>
+                </div>
+
+                <p class="error-message withdraw-error" id="withdrawError" role="alert">Please enter an amount to continue.</p>
+
+                <button type="submit" class="btn withdraw-btn">Withdraw <span aria-hidden="true">→</span></button>
+            </form>
+        </section>
+    </main>
+
+    <div class="activation-modal" id="activationModal" aria-hidden="true">
+        <div class="activation-modal__backdrop" data-close-modal></div>
+        <section class="activation-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="activationTitle" aria-describedby="activationMessage">
+            <button type="button" class="modal-close" id="closeModal" aria-label="Close activation message">×</button>
+            <div class="modal-icon" aria-hidden="true">🔐</div>
+            <span class="eyebrow">Activation required</span>
+            <h2 id="activationTitle">Withdrawal paused</h2>
+            <p id="activationMessage">You need to buy an activation code before withdrawals can be processed.</p>
+            <div class="modal-actions">
+                <button type="button" class="btn" id="buyActivationCode">Buy Activation Code</button>
+                <button type="button" class="btn btn-ghost" data-close-modal>Close</button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const withdrawForm = document.getElementById('withdrawForm');
+        const withdrawAmount = document.getElementById('withdrawAmount');
+        const withdrawError = document.getElementById('withdrawError');
+        const activationModal = document.getElementById('activationModal');
+        const closeModal = document.getElementById('closeModal');
+        const buyActivationCode = document.getElementById('buyActivationCode');
+        const telegramActivationLink = 'https://t.me/';
+
+        function openModal() {
+            activationModal.classList.add('is-open');
+            activationModal.setAttribute('aria-hidden', 'false');
+            closeModal.focus();
+        }
+
+        function hideModal() {
+            activationModal.classList.remove('is-open');
+            activationModal.setAttribute('aria-hidden', 'true');
+            withdrawAmount.focus();
+        }
+
+        withdrawForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const amount = withdrawAmount.value.trim();
+
+            if (!amount) {
+                withdrawError.style.display = 'block';
+                withdrawAmount.classList.add('error');
+                withdrawAmount.focus();
+                return;
+            }
+
+            withdrawError.style.display = 'none';
+            withdrawAmount.classList.remove('error');
+            openModal();
+        });
+
+        withdrawAmount.addEventListener('input', () => {
+            if (withdrawAmount.value.trim()) {
+                withdrawError.style.display = 'none';
+                withdrawAmount.classList.remove('error');
+            }
+        });
+
+        document.querySelectorAll('[data-close-modal]').forEach((button) => {
+            button.addEventListener('click', hideModal);
+        });
+
+        closeModal.addEventListener('click', hideModal);
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && activationModal.classList.contains('is-open')) {
+                hideModal();
+            }
+        });
+
+        buyActivationCode.addEventListener('click', () => {
+            window.location.href = telegramActivationLink;
+        });
+    </script>
+</body>
+</html>
