@@ -40,6 +40,7 @@
             <p class="form-subtitle">Enter your credentials to open your dashboard and continue managing transfers.</p>
 
             <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage"></div>
 
             <form id="loginForm">
                 <div class="form-group">
@@ -51,6 +52,10 @@
                     <label for="password">Password</label>
                     <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password" required>
                 </div>
+
+                <p class="forgot-password">
+                    <a href="#" id="forgotPasswordLink">Forgot your password?</a>
+                </p>
 
                 <button type="submit" class="btn">Login <span aria-hidden="true">→</span></button>
             </form>

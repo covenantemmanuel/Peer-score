@@ -273,6 +273,23 @@ input:focus {
     transform: translateY(0);
 }
 
+
+.forgot-password {
+    margin: -4px 0 20px;
+    text-align: right;
+}
+
+.forgot-password a {
+    color: var(--primary);
+    font-size: 0.92rem;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.forgot-password a:hover {
+    text-decoration: underline;
+}
+
 .link-text {
     margin-top: 24px;
     color: var(--muted);

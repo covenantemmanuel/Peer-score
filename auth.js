@@ -62,12 +62,45 @@ if (document.getElementById('loginForm')) {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessage');
     
     errorMessage.style.display = 'none';
+    if (successMessage) {
+      successMessage.style.display = 'none';
+    }
     
     try {
       await auth.signInWithEmailAndPassword(email, password);
       window.location.href = 'home.html';
+    } catch (error) {
+      errorMessage.textContent = error.message;
+      errorMessage.style.display = 'block';
+    }
+  });
+}
+
+// Forgot Password Function
+if (document.getElementById('forgotPasswordLink')) {
+  document.getElementById('forgotPasswordLink').addEventListener('click', async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById('email').value.trim();
+    const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessage');
+
+    errorMessage.style.display = 'none';
+    successMessage.style.display = 'none';
+
+    if (!email) {
+      errorMessage.textContent = 'Please enter your email address first.';
+      errorMessage.style.display = 'block';
+      return;
+    }
+
+    try {
+      await auth.sendPasswordResetEmail(email);
+      successMessage.textContent = 'Password reset link sent. Please check your email.';
+      successMessage.style.display = 'block';
     } catch (error) {
       errorMessage.textContent = error.message;
       errorMessage.style.display = 'block';
