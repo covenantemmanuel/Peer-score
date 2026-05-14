@@ -74,3 +74,30 @@ if (document.getElementById('loginForm')) {
     }
   });
 }
+// Password Reset Function
+if (document.getElementById('resetPasswordLink')) {
+  document.getElementById('resetPasswordLink').addEventListener('click', async () => {
+    const email = document.getElementById('email').value.trim();
+    const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessage');
+
+    errorMessage.style.display = 'none';
+    successMessage.style.display = 'none';
+
+    if (!email) {
+      errorMessage.textContent = 'Enter your email address first, then click the password reset link.';
+      errorMessage.style.display = 'block';
+      document.getElementById('email').focus();
+      return;
+    }
+
+    try {
+      await auth.sendPasswordResetEmail(email);
+      successMessage.textContent = 'Password reset email sent. Check your inbox for the reset link.';
+      successMessage.style.display = 'block';
+    } catch (error) {
+      errorMessage.textContent = error.message;
+      errorMessage.style.display = 'block';
+    }
+  });
+}
