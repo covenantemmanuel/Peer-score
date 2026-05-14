@@ -1004,3 +1004,249 @@ body.landing-page {
         width: 100%;
     }
 }
+
+/* Withdrawal page */
+body.withdraw-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+    background:
+        radial-gradient(circle at 15% 18%, rgba(34, 211, 238, 0.42), transparent 28rem),
+        radial-gradient(circle at 85% 12%, rgba(124, 58, 237, 0.36), transparent 30rem),
+        linear-gradient(135deg, #0f172a 0%, #312e81 46%, #0891b2 100%);
+}
+
+.withdraw-shell {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 560px);
+    animation: withdrawCardIn 0.7s ease both;
+}
+
+.withdraw-card {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(28px, 6vw, 44px);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 34px;
+    background: rgba(255, 255, 255, 0.88);
+    box-shadow: 0 30px 90px rgba(2, 6, 23, 0.34);
+    backdrop-filter: blur(26px);
+}
+
+.withdraw-card__glow {
+    position: absolute;
+    top: -90px;
+    right: -110px;
+    width: 260px;
+    height: 260px;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.36), transparent 68%);
+    pointer-events: none;
+}
+
+.withdraw-brand,
+.withdraw-copy,
+.withdraw-card form {
+    position: relative;
+    z-index: 1;
+}
+
+.withdraw-copy {
+    margin: 42px 0 30px;
+}
+
+.withdraw-copy h1 {
+    margin-bottom: 16px;
+    font-size: clamp(2.25rem, 8vw, 4.1rem);
+    line-height: 0.95;
+    letter-spacing: -0.07em;
+}
+
+.withdraw-copy p {
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+.amount-field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 16px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.82);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.amount-field:focus-within {
+    border-color: rgba(79, 70, 229, 0.72);
+    box-shadow: 0 0 0 5px rgba(79, 70, 229, 0.13);
+    transform: translateY(-1px);
+}
+
+.amount-field span {
+    color: var(--primary-dark);
+    font-size: 1.15rem;
+    font-weight: 900;
+}
+
+.amount-field input {
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    transform: none;
+}
+
+.amount-field input:focus {
+    box-shadow: none;
+    transform: none;
+}
+
+.withdraw-error {
+    text-align: left;
+}
+
+.withdraw-btn {
+    margin-top: 6px;
+    min-height: 56px;
+    border-radius: 18px;
+}
+
+.activation-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.activation-modal.is-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.activation-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.46);
+    backdrop-filter: blur(12px);
+}
+
+.activation-modal__dialog {
+    position: relative;
+    width: min(100%, 460px);
+    padding: 34px;
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 32px 90px rgba(2, 6, 23, 0.34);
+    text-align: center;
+    transform: translateY(18px) scale(0.96);
+    transition: transform 0.25s ease;
+}
+
+.activation-modal.is-open .activation-modal__dialog {
+    animation: modalFadeIn 0.32s ease both;
+}
+
+.modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    display: grid;
+    width: 40px;
+    height: 40px;
+    place-items: center;
+    border: 0;
+    border-radius: 14px;
+    color: var(--muted);
+    background: rgba(148, 163, 184, 0.13);
+    font-size: 1.45rem;
+    cursor: pointer;
+    transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.modal-close:hover {
+    color: var(--text);
+    background: rgba(79, 70, 229, 0.12);
+    transform: rotate(90deg);
+}
+
+.modal-icon {
+    display: grid;
+    width: 64px;
+    height: 64px;
+    place-items: center;
+    margin: 2px auto 18px;
+    border-radius: 22px;
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.14), rgba(6, 182, 212, 0.16));
+    font-size: 1.8rem;
+}
+
+.activation-modal__dialog h2 {
+    margin-bottom: 12px;
+    font-size: clamp(2rem, 7vw, 2.75rem);
+    line-height: 1;
+    letter-spacing: -0.055em;
+}
+
+.activation-modal__dialog p {
+    color: var(--muted);
+    line-height: 1.65;
+}
+
+.modal-actions {
+    display: grid;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+@keyframes withdrawCardIn {
+    from {
+        opacity: 0;
+        transform: translateY(24px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 640px) {
+    body.withdraw-page {
+        align-items: flex-start;
+        padding: 18px;
+    }
+
+    .withdraw-shell {
+        margin: auto 0;
+    }
+
+    .withdraw-card,
+    .activation-modal__dialog {
+        border-radius: 24px;
+    }
+
+    .modal-actions .btn {
+        min-height: 54px;
+    }
+}
