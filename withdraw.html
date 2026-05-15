@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Withdraw - PeerPay</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 </head>
 <body class="withdraw-page">
     <main class="withdraw-shell" aria-labelledby="withdrawTitle">
@@ -27,14 +30,14 @@
                     <label for="withdrawAmount">Amount</label>
                     <div class="amount-field">
                         <span aria-hidden="true">$</span>
-                        <input type="number" id="withdrawAmount" name="withdrawAmount" inputmode="decimal" min="0.01" step="0.01" placeholder="0.00" aria-describedby="withdrawError" required>
+                        <input type="number" id="withdrawAmount" name="withdrawAmount" inputmode="decimal" min="0.01" step="0.01" placeholder="0.00" aria-describedby="withdrawBalanceHint withdrawError" required disabled>
                     </div>
-                    <small class="helper-text">Minimum amount must be entered before continuing.</small>
+                    <small class="helper-text" id="withdrawBalanceHint">Available to withdraw: Loading...</small>
                 </div>
 
                 <p class="error-message withdraw-error" id="withdrawError" role="alert">Please enter an amount to continue.</p>
 
-                <button type="submit" class="btn withdraw-btn">Withdraw <span aria-hidden="true">→</span></button>
+                <button type="submit" class="btn withdraw-btn" id="withdrawSubmit" disabled>Withdraw <span aria-hidden="true">→</span></button>
             </form>
         </section>
     </main>
@@ -54,14 +57,65 @@
         </section>
     </div>
 
+    <script src="firebase-config.js"></script>
     <script>
         const withdrawForm = document.getElementById('withdrawForm');
         const withdrawAmount = document.getElementById('withdrawAmount');
         const withdrawError = document.getElementById('withdrawError');
+        const withdrawBalanceHint = document.getElementById('withdrawBalanceHint');
+        const withdrawSubmit = document.getElementById('withdrawSubmit');
         const activationModal = document.getElementById('activationModal');
         const closeModal = document.getElementById('closeModal');
         const buyActivationCode = document.getElementById('buyActivationCode');
         const telegramActivationLink = 'https://t.me/';
+
+        let availableBalance = 0;
+        let balanceLoaded = false;
+
+        function formatCurrency(amount) {
+            return `$${amount.toFixed(2)}`;
+        }
+
+        function showWithdrawError(message) {
+            withdrawError.textContent = message;
+            withdrawError.style.display = 'block';
+            withdrawAmount.classList.add('error');
+        }
+
+        function clearWithdrawError() {
+            withdrawError.style.display = 'none';
+            withdrawAmount.classList.remove('error');
+        }
+
+        function setWithdrawalReady(balance) {
+            availableBalance = Math.max(0, Number(balance) || 0);
+            balanceLoaded = true;
+            withdrawAmount.disabled = false;
+            withdrawSubmit.disabled = false;
+            withdrawAmount.max = availableBalance.toFixed(2);
+            withdrawBalanceHint.textContent = `Available to withdraw: ${formatCurrency(availableBalance)}`;
+        }
+
+        auth.onAuthStateChanged(async (user) => {
+            if (!user) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            try {
+                const doc = await db.collection('users').doc(user.uid).get();
+
+                if (!doc.exists) {
+                    throw new Error('Unable to find your account balance.');
+                }
+
+                setWithdrawalReady(doc.data().balance);
+            } catch (error) {
+                console.error('Error loading withdrawal balance:', error);
+                withdrawBalanceHint.textContent = 'Available to withdraw: Unable to load balance.';
+                showWithdrawError('Unable to load your account balance. Please try again later.');
+            }
+        });
 
         function openModal() {
             activationModal.classList.add('is-open');
@@ -77,25 +131,44 @@
 
         withdrawForm.addEventListener('submit', (event) => {
             event.preventDefault();
-            const amount = withdrawAmount.value.trim();
+            const amount = parseFloat(withdrawAmount.value);
 
-            if (!amount) {
-                withdrawError.style.display = 'block';
-                withdrawAmount.classList.add('error');
+            if (!balanceLoaded) {
+                showWithdrawError('Please wait while we load your account balance.');
                 withdrawAmount.focus();
                 return;
             }
 
-            withdrawError.style.display = 'none';
-            withdrawAmount.classList.remove('error');
+            if (!Number.isFinite(amount) || amount <= 0) {
+                showWithdrawError('Please enter an amount greater than $0.00 to continue.');
+                withdrawAmount.focus();
+                return;
+            }
+
+            if (amount > availableBalance) {
+                showWithdrawError(`You can only withdraw up to your available balance of ${formatCurrency(availableBalance)}.`);
+                withdrawAmount.focus();
+                return;
+            }
+
+            clearWithdrawError();
             openModal();
         });
 
         withdrawAmount.addEventListener('input', () => {
-            if (withdrawAmount.value.trim()) {
-                withdrawError.style.display = 'none';
-                withdrawAmount.classList.remove('error');
+            const amount = parseFloat(withdrawAmount.value);
+
+            if (!withdrawAmount.value.trim()) {
+                clearWithdrawError();
+                return;
             }
+
+            if (Number.isFinite(amount) && amount > availableBalance) {
+                showWithdrawError(`You can only withdraw up to your available balance of ${formatCurrency(availableBalance)}.`);
+                return;
+            }
+
+            clearWithdrawError();
         });
 
         document.querySelectorAll('[data-close-modal]').forEach((button) => {
