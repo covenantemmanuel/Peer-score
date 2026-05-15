@@ -424,6 +424,21 @@ input:focus {
     letter-spacing: -0.06em;
 }
 
+.withdraw-home-btn {
+    position: relative;
+    z-index: 1;
+    margin-top: 24px;
+    color: var(--primary-dark);
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 16px 32px rgba(15, 23, 42, 0.16);
+    text-decoration: none;
+}
+
+.withdraw-home-btn:hover {
+    color: #ffffff;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.92), rgba(79, 70, 229, 0.88));
+}
+
 .transfer-section,
 .transfer-history,
 .panel {
