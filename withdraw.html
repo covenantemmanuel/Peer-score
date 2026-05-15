@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Withdraw - PeerPay</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 </head>
 <body class="withdraw-page">
     <main class="withdraw-shell" aria-labelledby="withdrawTitle">
@@ -29,7 +32,7 @@
                         <span aria-hidden="true">$</span>
                         <input type="number" id="withdrawAmount" name="withdrawAmount" inputmode="decimal" min="0.01" step="0.01" placeholder="0.00" aria-describedby="withdrawError" required>
                     </div>
-                    <small class="helper-text">Minimum amount must be entered before continuing.</small>
+                    <small class="helper-text" id="withdrawHelper">Available balance: <span id="withdrawBalance">Loading...</span></small>
                 </div>
 
                 <p class="error-message withdraw-error" id="withdrawError" role="alert">Please enter an amount to continue.</p>
@@ -54,6 +57,7 @@
         </section>
     </div>
 
+    <script src="firebase-config.js"></script>
     <script>
         const withdrawForm = document.getElementById('withdrawForm');
         const withdrawAmount = document.getElementById('withdrawAmount');
@@ -61,7 +65,53 @@
         const activationModal = document.getElementById('activationModal');
         const closeModal = document.getElementById('closeModal');
         const buyActivationCode = document.getElementById('buyActivationCode');
+        const withdrawBalance = document.getElementById('withdrawBalance');
         const telegramActivationLink = 'https://t.me/Pay_out_2';
+        let currentUser = null;
+        let currentBalance = 0;
+
+        auth.onAuthStateChanged(async (user) => {
+            if (!user) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            currentUser = user;
+            await loadWithdrawBalance();
+        });
+
+        async function loadWithdrawBalance() {
+            try {
+                if (!currentUser) {
+                    showWithdrawError('Please wait while we verify your account.');
+                    return false;
+                }
+
+                const doc = await db.collection('users').doc(currentUser.uid).get();
+
+                if (!doc.exists) {
+                    showWithdrawError('Unable to find your account balance. Please sign in again.');
+                    return false;
+                }
+
+                const userData = doc.data();
+                currentBalance = Number(userData.balance) || 0;
+                withdrawBalance.textContent = `$${currentBalance.toFixed(2)}`;
+                withdrawAmount.max = currentBalance.toFixed(2);
+                return true;
+            } catch (error) {
+                console.error('Error loading withdrawal balance:', error);
+                withdrawBalance.textContent = 'Unavailable';
+                showWithdrawError('Unable to load your balance. Please try again.');
+                return false;
+            }
+        }
+
+        function showWithdrawError(message) {
+            withdrawError.textContent = message;
+            withdrawError.style.display = 'block';
+            withdrawAmount.classList.add('error');
+        }
 
         function openModal() {
             activationModal.classList.add('is-open');
@@ -75,13 +125,25 @@
             withdrawAmount.focus();
         }
 
-        withdrawForm.addEventListener('submit', (event) => {
+        withdrawForm.addEventListener('submit', async (event) => {
             event.preventDefault();
-            const amount = withdrawAmount.value.trim();
+            const amount = parseFloat(withdrawAmount.value);
 
-            if (!amount) {
-                withdrawError.style.display = 'block';
-                withdrawAmount.classList.add('error');
+            if (!amount || amount <= 0) {
+                showWithdrawError('Please enter an amount greater than $0.00 to continue.');
+                withdrawAmount.focus();
+                return;
+            }
+
+            const balanceLoaded = await loadWithdrawBalance();
+
+            if (!balanceLoaded) {
+                withdrawAmount.focus();
+                return;
+            }
+
+            if (amount > currentBalance) {
+                showWithdrawError('Insufficient balance');
                 withdrawAmount.focus();
                 return;
             }
