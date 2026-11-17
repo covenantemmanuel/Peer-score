@@ -30,16 +30,16 @@ if (document.getElementById('signupForm')) {
       const userCredential = await auth.createUserWithEmailAndPassword(email, password);
       const user = userCredential.user;
       
-      // Create user profile in Firestore with $30 welcome bonus
+      // Create a new wallet with a zero starting balance; no promotional credit is issued.
       await db.collection('users').doc(user.uid).set({
         name: name,
         email: email,
-        balance: 30.00,
+        balance: 0.00,
         userId: user.uid,
         createdAt: new Date()
       });
       
-      successMessage.textContent = 'Account created successfully! $30 welcome bonus added.';
+      successMessage.textContent = 'Account created successfully! Your wallet balance is $0.00.';
       successMessage.style.display = 'block';
       
       // Redirect to home page after 2 seconds

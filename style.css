@@ -253,6 +253,7 @@ input:focus {
     gap: 10px;
     padding: 15px 18px;
     border: 0;
+    text-decoration: none;
     border-radius: 16px;
     color: #ffffff;
     background: linear-gradient(135deg, var(--primary), var(--accent));
@@ -589,6 +590,7 @@ body.landing-page {
 .landing-page .btn-compact {
     min-width: 0;
     padding-inline: 20px;
+    text-decoration: none;
 }
 
 .btn-ghost {
@@ -596,6 +598,7 @@ body.landing-page {
     background: rgba(255, 255, 255, 0.72);
     border: 1px solid rgba(79, 70, 229, 0.18);
     box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+    text-decoration: none;
 }
 
 .btn-ghost:hover {
@@ -1264,4 +1267,158 @@ body.withdraw-page {
     .modal-actions .btn {
         min-height: 54px;
     }
+}
+
+
+/* Peerpay visual refresh — clean, confident finance interface */
+:root {
+    --bg: #f3f6f4;
+    --bg-deep: #10251f;
+    --card: rgba(255, 255, 255, 0.96);
+    --card-solid: #ffffff;
+    --text: #17251f;
+    --muted: #718078;
+    --line: #e2eae5;
+    --primary: #167a55;
+    --primary-dark: #105c40;
+    --accent: #7bc9a2;
+    --success: #168653;
+    --danger: #c43d48;
+    --warning: #b7791f;
+    --shadow: 0 18px 55px rgba(22, 49, 37, 0.09);
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --radius-sm: 11px;
+}
+
+html { background: #f3f6f4; }
+body {
+    color: var(--text);
+    background:
+        radial-gradient(circle at 8% 0%, rgba(123, 201, 162, .13), transparent 28rem),
+        linear-gradient(145deg, #f8faf8 0%, #eff4f0 100%);
+}
+body::before {
+    background-image:
+        linear-gradient(rgba(22, 75, 49, .025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(22, 75, 49, .025) 1px, transparent 1px);
+}
+.auth-hero, .dashboard-hero {
+    border: 0;
+    color: #f5fff8;
+    background:
+        radial-gradient(circle at 85% 15%, rgba(123, 201, 162, .22), transparent 17rem),
+        linear-gradient(145deg, #102d23 0%, #174b37 58%, #167a55 100%);
+    box-shadow: 0 24px 65px rgba(16, 45, 35, .19);
+}
+.form-container, .panel, .account-column, .transfer-column,
+.balance-container, .user-info, .transfer-section, .transfer-history,
+.feature-card, .step-card, .testimonial-card, .hero-card, .security-panel,
+.cta-panel {
+    border: 1px solid rgba(218, 230, 222, .9);
+    box-shadow: 0 14px 42px rgba(22, 49, 37, .065);
+}
+.form-container {
+    border-radius: 24px;
+    background: rgba(255,255,255,.97);
+}
+.logo-mark {
+    background: linear-gradient(135deg, #23966b, #126044);
+    box-shadow: 0 8px 20px rgba(22, 122, 85, .22);
+}
+.btn {
+    border: 0;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #19845d, #116344);
+    box-shadow: 0 8px 18px rgba(22, 122, 85, .16);
+    transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+}
+.btn:hover {
+    filter: brightness(1.04);
+    box-shadow: 0 12px 24px rgba(22, 122, 85, .22);
+    transform: translateY(-1px);
+}
+.btn-ghost, .text-link-button { color: var(--primary); }
+.btn-ghost {
+    border: 1px solid #dce8df;
+    background: #fff;
+    box-shadow: none;
+}
+input, select, textarea {
+    border: 1px solid #dfe8e2;
+    border-radius: 12px;
+    background: #fbfdfb;
+    color: var(--text);
+}
+input:focus, select:focus, textarea:focus {
+    border-color: rgba(22, 122, 85, .65);
+    box-shadow: 0 0 0 4px rgba(22, 122, 85, .10);
+}
+.eyebrow { color: #24845e; letter-spacing: .11em; }
+.auth-hero .eyebrow, .dashboard-hero .eyebrow { color: #a9e4c3; }
+.stat-card {
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 14px;
+    background: rgba(255,255,255,.09);
+}
+.balance-container {
+    border: 0;
+    color: #f5fff8;
+    background: linear-gradient(145deg, #123c2c, #167a55);
+}
+.balance-container .balance-label,
+.balance-container .helper-text { color: rgba(245,255,248,.76); }
+.balance-container .balance-amount { color: #fff; }
+.balance-container .withdraw-home-btn {
+    color: #145d40;
+    background: #f2fff6;
+    box-shadow: none;
+}
+.user-info, .transfer-section, .transfer-history,
+.feature-card, .step-card, .testimonial-card {
+    border-radius: 18px;
+    background: rgba(255,255,255,.96);
+}
+.transaction-item {
+    border: 1px solid #e8eee9;
+    border-radius: 12px;
+    background: #fbfdfb;
+}
+.landing-page .landing-header {
+    border-bottom: 1px solid rgba(222, 233, 225, .75);
+    background: rgba(248, 251, 248, .88);
+    backdrop-filter: blur(18px);
+}
+.landing-hero {
+    border: 0;
+    border-radius: 26px;
+    background: linear-gradient(135deg, #102d23, #176344);
+    box-shadow: 0 22px 60px rgba(16, 45, 35, .16);
+}
+.landing-hero h1, .landing-hero p { color: #f4fff7; }
+.landing-hero .eyebrow { color: #a9e4c3; }
+.hero-card {
+    border: 1px solid rgba(255,255,255,.18);
+    background: rgba(255,255,255,.96);
+}
+.withdraw-page {
+    background:
+        radial-gradient(circle at 12% 12%, rgba(123, 201, 162, .24), transparent 28rem),
+        linear-gradient(135deg, #102d23, #176344);
+}
+.withdraw-card {
+    border: 1px solid rgba(255,255,255,.75);
+    border-radius: 26px;
+    box-shadow: 0 28px 80px rgba(3, 24, 15, .24);
+}
+.amount-field:focus-within {
+    border-color: rgba(22, 122, 85, .72);
+    box-shadow: 0 0 0 5px rgba(22, 122, 85, .11);
+}
+@media (max-width: 640px) {
+    body { padding: 16px; }
+    .auth-shell { gap: 16px; }
+    .auth-hero { min-height: auto; padding: 28px 24px; }
+    .form-container { padding: 26px 22px; }
+    .dashboard-grid { gap: 16px; }
 }

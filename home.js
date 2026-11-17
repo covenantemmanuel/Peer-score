@@ -28,6 +28,7 @@ async function loadUserData() {
     const doc = await db.collection('users').doc(currentUser.uid).get();
     if (doc.exists) {
       userData = doc.data();
+      userData.balance = Number(userData.balance) || 0;
       userBalance.textContent = `$${userData.balance.toFixed(2)}`;
     }
   } catch (error) {
