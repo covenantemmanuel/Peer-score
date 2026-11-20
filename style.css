@@ -1400,7 +1400,23 @@ input:focus, select:focus, textarea:focus {
 .hero-card {
     border: 1px solid rgba(255,255,255,.18);
     background: rgba(255,255,255,.96);
+    color: var(--text);
 }
+.hero-card-topline { color: var(--muted); }
+.hero-card-topline strong { color: var(--text); }
+.score-ticket {
+    background: rgba(22, 122, 85, 0.06);
+    border-color: rgba(22, 122, 85, 0.14);
+}
+.score-ticket span { color: var(--muted); }
+.score-ticket strong { color: var(--text); }
+.landing-stats.hero-stats .stat-card {
+    background: rgba(22, 122, 85, 0.06);
+    border-color: rgba(22, 122, 85, 0.14);
+    color: var(--text);
+}
+.landing-stats.hero-stats .stat-card span { color: var(--muted); }
+.landing-stats.hero-stats .stat-card strong { color: var(--text); }
 .withdraw-page {
     background:
         radial-gradient(circle at 12% 12%, rgba(123, 201, 162, .24), transparent 28rem),
@@ -1422,3 +1438,144 @@ input:focus, select:focus, textarea:focus {
     .form-container { padding: 26px 22px; }
     .dashboard-grid { gap: 16px; }
 }
+
+
+/* Glassmorphism enhancement — landing hero */
+.landing-page .landing-hero {
+    position: relative;
+    background:
+        linear-gradient(135deg, rgba(16, 45, 35, 0.92), rgba(23, 99, 68, 0.82)),
+        radial-gradient(circle at 85% 15%, rgba(123, 201, 162, 0.35), transparent 22rem);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow:
+        0 40px 100px rgba(16, 45, 35, 0.32),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    animation: heroRiseIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+    overflow: hidden;
+}
+
+.landing-page .landing-hero::after {
+    content: '';
+    position: absolute;
+    inset: -40% -20% auto auto;
+    width: 60%;
+    height: 60%;
+    background: radial-gradient(circle, rgba(123, 201, 162, 0.35), transparent 70%);
+    filter: blur(40px);
+    pointer-events: none;
+    animation: heroGlowDrift 8s ease-in-out infinite alternate;
+}
+
+.landing-page .landing-hero-copy {
+    animation: heroFadeUp 0.9s 0.15s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+    .landing-page .landing-hero h1 {
+        background: linear-gradient(120deg, #f4fff7 0%, #a9e4c3 60%, #7bc9a2 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+}
+
+.landing-page .hero-card {
+    background: rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(26px);
+    -webkit-backdrop-filter: blur(26px);
+    border: 1px solid rgba(255, 255, 255, 0.32);
+    box-shadow:
+        0 30px 70px rgba(16, 45, 35, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.45);
+    color: #f4fff7;
+    animation: cardSlideIn 0.9s 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.landing-page .hero-card:hover {
+    transform: translateY(-6px);
+    box-shadow:
+        0 40px 90px rgba(16, 45, 35, 0.34),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.landing-page .hero-card-topline { color: rgba(244, 255, 247, 0.72); }
+.landing-page .hero-card-topline strong { color: #ffffff; }
+
+.landing-page .score-ticket {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 20px;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+.landing-page .score-ticket:hover { transform: translateX(4px); background: rgba(255, 255, 255, 0.18); }
+.landing-page .score-ticket span { color: rgba(244, 255, 247, 0.7); }
+.landing-page .score-ticket strong { color: #ffffff; }
+
+.landing-page .landing-stats.hero-stats .stat-card {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #ffffff;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+.landing-page .landing-stats.hero-stats .stat-card:hover {
+    transform: translateY(-4px);
+    background: rgba(255, 255, 255, 0.2);
+}
+.landing-page .landing-stats.hero-stats .stat-card span { color: rgba(244, 255, 247, 0.7); }
+.landing-page .landing-stats.hero-stats .stat-card strong { color: #ffffff; }
+
+.landing-page .hero-buttons .btn {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+}
+.landing-page .hero-buttons .btn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 18px 40px rgba(16, 45, 35, 0.4);
+}
+
+.landing-page .landing-hero .eyebrow {
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #a9e4c3;
+}
+
+@keyframes heroRiseIn {
+    from { opacity: 0; transform: translateY(28px) scale(0.985); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes heroFadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes cardSlideIn {
+    from { opacity: 0; transform: translateX(24px) scale(0.98); }
+    to { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes heroGlowDrift {
+    from { transform: translate(0, 0) scale(1); opacity: 0.7; }
+    to { transform: translate(-8%, 6%) scale(1.15); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .landing-page .landing-hero,
+    .landing-page .landing-hero-copy,
+    .landing-page .hero-card {
+        animation: none;
+    }
+    .landing-page .landing-hero::after { animation: none; }
+}
+
+@media (max-width: 960px) {
+    .landing-page .landing-hero { min-height: auto; }
+}
+
